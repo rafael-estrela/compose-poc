@@ -1,17 +1,25 @@
 package br.eti.rafaelcouto.rbscompose.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import br.eti.rafaelcouto.rbscompose.ui.state.MainUiState
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun RBSComposeNavHost(
     navController: NavHostController,
-    onScreenChanged: (MainUiState) -> Unit = {}
+    onRouteChanged: (Route) -> Unit = {}
 ) {
+    val state by navController.currentBackStackEntryAsState()
+    state?.let {
+        Route.fromPath[it.destination.route]?.let { route ->
+            onRouteChanged(route)
+        }
+    }
+
     NavHost(navController = navController, startDestination = Unit) {
-        homeScreen(navController, onScreenChanged)
-        userScreen(onScreenChanged)
+        homeScreen(navController)
+        userScreen()
     }
 }

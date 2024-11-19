@@ -5,17 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import br.eti.rafaelcouto.rbscompose.ui.state.MainUiState
 import br.eti.rafaelcouto.rbscompose.ui.state.UserScreenUiState
 
 @Composable
 fun UserScreen(
-    state: UserScreenUiState = UserScreenUiState(),
-    onScreenChanged: (MainUiState) -> Unit = {}
+    state: UserScreenUiState = UserScreenUiState()
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.align(Alignment.Center)) {
@@ -28,15 +25,6 @@ fun UserScreen(
                 text = "Senha: ${state.password}"
             )
         }
-    }
-
-    DisposableEffect(key1 = Unit) {
-        val mainState = MainUiState(
-            title = "Usuário",
-            hasBackButton = true
-        )
-        onScreenChanged(mainState)
-        onDispose {}
     }
 }
 

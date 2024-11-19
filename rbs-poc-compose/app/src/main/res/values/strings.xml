@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">rbs-poc-compose</string>
+    <string name="title_home">Home</string>
+    <string name="title_user">Usuário</string>
 </resources>

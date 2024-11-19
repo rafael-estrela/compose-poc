@@ -18,10 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,8 +30,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import br.eti.rafaelcouto.rbscompose.R
 import br.eti.rafaelcouto.rbscompose.navigation.RBSComposeNavHost
-import br.eti.rafaelcouto.rbscompose.ui.state.MainUiState
+import br.eti.rafaelcouto.rbscompose.viewmodel.MainViewModel
 import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.androidx.compose.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
@@ -54,16 +56,17 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun RBSComposeApp(navController: NavHostController = rememberNavController()) {
-    val (state, setState) = remember { mutableStateOf(MainUiState()) }
+    val viewModel: MainViewModel = koinViewModel()
+    val state by viewModel.state.collectAsState()
 
     RBSComposeApp(
-        topAppBarTitle = state.title,
+        topAppBarTitle = stringResource(id = state.title),
         showsBackButton = state.hasBackButton,
         onBackButtonPressed = navController::popBackStack,
         content = {
             RBSComposeNavHost(
                 navController = navController,
-                onScreenChanged = setState
+                onRouteChanged = viewModel::updateState
             )
         }
     )
